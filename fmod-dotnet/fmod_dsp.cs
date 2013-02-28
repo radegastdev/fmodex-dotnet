@@ -1,6 +1,6 @@
 /*$ preserve start $*/
 /* ========================================================================================== */
-/* FMOD Ex - DSP header file. Copyright (c), Firelight Technologies Pty, Ltd. 2004-2008.      */
+/* FMOD Ex - DSP header file. Copyright (c), Firelight Technologies Pty, Ltd. 2004-2011.      */
 /*                                                                                            */
 /* Use this header if you are interested in delving deeper into the FMOD software mixing /    */
 /* DSP engine.  In this header you can find parameter structures for FMOD system reigstered   */
@@ -45,7 +45,7 @@ namespace FMOD
         System::createDSPByType
     ]
     */
-    public enum DSP_TYPE
+    public enum DSP_TYPE :int
     {
         UNKNOWN,            /* This unit was created via a non FMOD plugin so has an unknown purpose */
         MIXER,              /* This unit does nothing but take inputs and mix them together then feed the result to the soundcard unit. */
@@ -60,13 +60,15 @@ namespace FMOD
         PARAMEQ,            /* This unit attenuates or amplifies a selected frequency range. */
         PITCHSHIFT,         /* This unit bends the pitch of a sound without changing the speed of playback. */
         CHORUS,             /* This unit produces a chorus effect on the sound. */
-        REVERB,             /* This unit produces a reverb effect on the sound. */
         VSTPLUGIN,          /* This unit allows the use of Steinberg VST plugins */
         WINAMPPLUGIN,       /* This unit allows the use of Nullsoft Winamp plugins */
         ITECHO,             /* This unit produces an echo on the sound and fades out at the desired rate as is used in Impulse Tracker. */
         COMPRESSOR,         /* This unit implements dynamic compression (linked multichannel, wideband) */
         SFXREVERB,          /* This unit implements SFX reverb */
-        LOWPASS_SIMPLE      /* This unit filters sound using a simple lowpass with no resonance, but has flexible cutoff and is fast. */
+        LOWPASS_SIMPLE,     /* This unit filters sound using a simple lowpass with no resonance, but has flexible cutoff and is fast. */
+        DELAY,              /* This unit produces different delays on individual channels of the sound. */
+        TREMOLO,            /* This unit produces a tremolo / chopper effect on the sound. */
+        LADSPAPLUGIN,       /* This unit allows the use of LADSPA standard plugins. */    
     }
 
 
@@ -99,8 +101,10 @@ namespace FMOD
         public float         min;             /* [in] Minimum value of the parameter (ie 100.0). */
         public float         max;             /* [in] Maximum value of the parameter (ie 22050.0). */
         public float         defaultval;      /* [in] Default value of parameter. */
-        public string        name;            /* [in] Name of the parameter to be displayed (ie "Cutoff frequency"). */
-        public string        label;           /* [in] Short string to be put next to value to denote the unit type (ie "hz"). */
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 16)]
+        public char[]        name;            /* [in] Name of the parameter to be displayed (ie "Cutoff frequency"). */
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 16)]
+        public char[]        label;           /* [in] Short string to be put next to value to denote the unit type (ie "hz"). */
         public string        description;     /* [in] Description of the parameter to be displayed as a help item / tooltip for this parameter. */
     }
 
@@ -325,6 +329,49 @@ namespace FMOD
     [ENUM]
     [  
         [DESCRIPTION]   
+        Parameter types for the FMOD_DSP_TYPE_DELAY filter.
+
+        [REMARKS]
+        Note.  Every time MaxDelay is changed, the plugin re-allocates the delay buffer.  This means the delay will dissapear at that time while it refills its new buffer.<br>
+        A larger MaxDelay results in larger amounts of memory allocated.<br>
+        Channel delays above MaxDelay will be clipped to MaxDelay and the delay buffer will not be resized.<br>
+        <br>
+
+        [PLATFORMS]
+        Win32, Win64, Linux, Linux64, Macintosh, Xbox, Xbox360, PlayStation 2, GameCube, PlayStation Portable, PlayStation 3, Wii
+
+        [SEE_ALSO]      
+        DSP::setParameter
+        DSP::getParameter
+        FMOD_DSP_TYPE
+    ]
+    */
+    public enum DSP_DELAY
+    {
+        CH0,      /* Channel #0 Delay in ms.   0  to 10000.  Default = 0.  */
+        CH1,      /* Channel #1 Delay in ms.   0  to 10000.  Default = 0.  */
+        CH2,      /* Channel #2 Delay in ms.   0  to 10000.  Default = 0.  */
+        CH3,      /* Channel #3 Delay in ms.   0  to 10000.  Default = 0.  */
+        CH4,      /* Channel #4 Delay in ms.   0  to 10000.  Default = 0.  */
+        CH5,      /* Channel #5 Delay in ms.   0  to 10000.  Default = 0.  */
+        CH6,      /* Channel #6 Delay in ms.   0  to 10000.  Default = 0.  */
+        CH7,      /* Channel #7 Delay in ms.   0  to 10000.  Default = 0.  */
+        CH8,      /* Channel #8 Delay in ms.   0  to 10000.  Default = 0.  */
+        CH9,      /* Channel #9 Delay in ms.   0  to 10000.  Default = 0.  */
+        CH10,     /* Channel #10 Delay in ms.  0  to 10000.  Default = 0.  */
+        CH11,     /* Channel #11 Delay in ms.  0  to 10000.  Default = 0.  */
+        CH12,     /* Channel #12 Delay in ms.  0  to 10000.  Default = 0.  */
+        CH13,     /* Channel #13 Delay in ms.  0  to 10000.  Default = 0.  */
+        CH14,     /* Channel #14 Delay in ms.  0  to 10000.  Default = 0.  */
+        CH15,     /* Channel #15 Delay in ms.  0  to 10000.  Default = 0.  */
+        MAXDELAY, /* Maximum delay in ms.      0  to 1000.   Default = 10. */
+    }
+
+
+    /*
+    [ENUM]
+    [  
+        [DESCRIPTION]   
         Parameter types for the FMOD_DSP_TYPE_FLANGE filter.
 
         [REMARKS]
@@ -348,6 +395,42 @@ namespace FMOD
         WETMIX,      /* Volume of flange signal to pass to output.  0.0 to 1.0. Default = 0.55. */
         DEPTH,       /* Flange depth.  0.01 to 1.0.  Default = 1.0. */
         RATE         /* Flange speed in hz.  0.0 to 20.0.  Default = 0.1. */
+    }
+
+
+    /*
+    [ENUM]
+    [  
+        [DESCRIPTION]   
+        Parameter types for the FMOD_DSP_TYPE_TREMOLO filter.
+
+        [REMARKS]
+        The tremolo effect varies the amplitude of a sound. Depending on the settings, this unit can produce a tremolo, chopper or auto-pan effect.<br>
+        <br>
+        The shape of the LFO (low freq. oscillator) can morphed between sine, triangle and sawtooth waves using the FMOD_DSP_TREMOLO_SHAPE and FMOD_DSP_TREMOLO_SKEW parameters.<br>
+        FMOD_DSP_TREMOLO_DUTY and FMOD_DSP_TREMOLO_SQUARE are useful for a chopper-type effect where the first controls the on-time duration and second controls the flatness of the envelope.<br>
+        FMOD_DSP_TREMOLO_SPREAD varies the LFO phase between channels to get an auto-pan effect. This works best with a sine shape LFO.<br>
+        The LFO can be synchronized using the FMOD_DSP_TREMOLO_PHASE parameter which sets its instantaneous phase.<br>
+
+        [PLATFORMS]
+        Win32, Win64, Linux, Linux64, Macintosh, Xbox, Xbox360, PlayStation 2, GameCube, PlayStation Portable, PlayStation 3, Wii
+
+        [SEE_ALSO]      
+        DSP::setParameter
+        DSP::getParameter
+        FMOD_DSP_TYPE
+    ]
+    */
+    public enum DSP_TREMOLO
+    {
+        FREQUENCY,     /* LFO frequency in Hz.  0.1 to 20.  Default = 4. */
+        DEPTH,         /* Tremolo depth.  0 to 1.  Default = 0. */
+        SHAPE,         /* LFO shape morph between triangle and sine.  0 to 1.  Default = 0. */
+        SKEW,          /* Time-skewing of LFO cycle.  -1 to 1.  Default = 0. */
+        DUTY,          /* LFO on-time.  0 to 1.  Default = 0.5. */
+        SQUARE,        /* Flatness of the LFO shape.  0 to 1.  Default = 0. */
+        PHASE,         /* Instantaneous LFO phase.  0 to 1.  Default = 0. */
+        SPREAD         /* Rotation / auto-pan effect.  -1 to 1.  Default = 0. */
     }
 
 
@@ -510,34 +593,6 @@ namespace FMOD
     }
 
 
-
-    /*
-    [ENUM]
-    [  
-        [DESCRIPTION]   
-        Parameter types for the FMOD_DSP_TYPE_REVERB filter.
-
-        [REMARKS]
-
-        [PLATFORMS]
-        Win32, Win64, Linux, Macintosh, Xbox, Xbox360, PlayStation 2, GameCube, PlayStation Portable
-
-        [SEE_ALSO]      
-        DSP::setParameter
-        DSP::getParameter
-        FMOD_DSP_TYPE
-    ]
-    */
-    public enum DSP_REVERB
-    {
-        ROOMSIZE, /* Roomsize. 0.0 to 1.0.  Default = 0.5 */
-        DAMP,     /* Damp.     0.0 to 1.0.  Default = 0.5 */
-        WETMIX,   /* Wet mix.  0.0 to 1.0.  Default = 0.33 */
-        DRYMIX,   /* Dry mix.  0.0 to 1.0.  Default = 0.0 */
-        WIDTH,    /* Width.    0.0 to 1.0.  Default = 1.0 */
-        MODE      /* Mode.     0 (normal), 1 (freeze).  Default = 0 */
-    }
-
     /*
     [ENUM]
     [  
@@ -651,7 +706,33 @@ namespace FMOD
         REVERBDELAY,         /* Reverb Delay   : Late reverberation delay time relative to first reflection in seconds.  Ranges from 0.0 to 0.1.  Default is 0.04. */
         DIFFUSION,           /* Diffusion      : Reverberation diffusion (echo density) in percent.  Ranges from 0.0 to 100.0.  Default is 100.0. */
         DENSITY,             /* Density        : Reverberation density (modal density) in percent.  Ranges from 0.0 to 100.0.  Default is 100.0. */
-        HFREFERENCE          /* HF Reference   : Reference high frequency in Hz.  Ranges from 20.0 to 20000.0. Default is 5000.0. */
+        HFREFERENCE,         /* HF Reference   : Reference high frequency in Hz.  Ranges from 20.0 to 20000.0. Default is 5000.0. */
+        ROOMLF,              /* Room LF        : Room effect low-frequency level in mB.  Ranges from -10000.0 to 0.0.  Default is 0.0. */
+        LFREFERENCE          /* LF Reference   : Reference low-frequency in Hz.  Ranges from 20.0 to 1000.0. Default is 250.0. */
+    }
+
+    /*
+    [ENUM]
+    [  
+        [DESCRIPTION]   
+        Parameter types for the FMOD_DSP_TYPE_LOWPASS_SIMPLE filter.<br>
+        This is a very simple low pass filter, based on two single-pole RC time-constant modules.
+        The emphasis is on speed rather than accuracy, so this should not be used for task requiring critical filtering.<br> 
+
+        [REMARKS]
+
+        [PLATFORMS]
+        Win32, Win64, Linux, Linux64, Macintosh, Xbox, Xbox360, PlayStation 2, GameCube, PlayStation Portable, PlayStation 3, Wii
+
+        [SEE_ALSO]      
+        DSP::setParameter
+        DSP::getParameter
+        FMOD_DSP_TYPE
+    ]
+    */
+    public enum DSP_LOWPASS_SIMPLE
+    {
+        CUTOFF     /* Lowpass cutoff frequency in hz.  10.0 to 22000.0.  Default = 5000.0 */
     }
 /*$ preserve start $*/
 }

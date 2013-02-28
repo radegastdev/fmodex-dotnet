@@ -1,5 +1,5 @@
 /* ============================================================================================= = */
-/* FMOD Ex - Error string header file. Copyright (c), Firelight Technologies Pty, Ltd. 2004-2008.  */
+/* FMOD Ex - Error string header file. Copyright (c), Firelight Technologies Pty, Ltd. 2004-2011.  */
 /*                                                                                                 */
 /* Use this header if you want to store or display a string version / english explanation of       */
 /* the FMOD error codes.                                                                           */
@@ -52,14 +52,13 @@ namespace FMOD
                 case FMOD.RESULT.ERR_INVALID_FLOAT:          return "Value passed in was a NaN, Inf or denormalized float. ";
                 case FMOD.RESULT.ERR_INVALID_HANDLE:         return "An invalid object handle was used. ";
                 case FMOD.RESULT.ERR_INVALID_PARAM:          return "An invalid parameter was passed to this function. ";
+                case FMOD.RESULT.ERR_INVALID_POSITION:       return "An invalid seek position was passed to this function. ";
                 case FMOD.RESULT.ERR_INVALID_SPEAKER:        return "An invalid speaker was passed to this function based on the current speaker mode. ";
                 case FMOD.RESULT.ERR_INVALID_SYNCPOINT:      return "The syncpoint did not come from this sound handle.";
                 case FMOD.RESULT.ERR_INVALID_VECTOR:         return "The vectors passed in are not unit length, or perpendicular. ";
-                case FMOD.RESULT.ERR_IRX:                    return "PS2 only.  fmodex.irx failed to initialize.  This is most likely because you forgot to load it. ";
                 case FMOD.RESULT.ERR_MAXAUDIBLE:             return "Reached maximum audible playback count for this sound's soundgroup. ";
                 case FMOD.RESULT.ERR_MEMORY:                 return "Not enough memory or resources. ";
                 case FMOD.RESULT.ERR_MEMORY_CANTPOINT:       return "Can't use FMOD_OPENMEMORY_POINT on non PCM source data, or non mp3/xma/adpcm data if FMOD_CREATECOMPRESSEDSAMPLE was used. ";
-                case FMOD.RESULT.ERR_MEMORY_IOP:             return "PS2 only.  Not enough memory or resources on PlayStation 2 IOP ram. ";
                 case FMOD.RESULT.ERR_MEMORY_SRAM:            return "Not enough memory or resources on console sound ram. ";
                 case FMOD.RESULT.ERR_NEEDS2D:                return "Tried to call a command on a 3d sound when the command was meant for 2d sound. ";
                 case FMOD.RESULT.ERR_NEEDS3D:                return "Tried to call a command on a 2d sound when the command was meant for 3d sound. ";
@@ -83,6 +82,8 @@ namespace FMOD
                 case FMOD.RESULT.ERR_PLUGIN_INSTANCES:       return "The number of allowed instances of a plugin has been exceeded ";
                 case FMOD.RESULT.ERR_PLUGIN_MISSING:         return "A requested output, dsp unit type or codec was not available. ";
                 case FMOD.RESULT.ERR_PLUGIN_RESOURCE:        return "A resource that the plugin requires cannot be found. (ie the DLS file for MIDI playback) ";
+                case FMOD.RESULT.ERR_PRELOADED:              return "The specified sound is still in use by the event system, call EventSystem::unloadFSB before trying to release it. ";
+                case FMOD.RESULT.ERR_PROGRAMMERSOUND:        return "The specified sound is still in use by the event system, wait for the event which is using it finish with it. ";
                 case FMOD.RESULT.ERR_RECORD:                 return "An error occured trying to initialize the recording device. ";
                 case FMOD.RESULT.ERR_REVERB_INSTANCE:        return "Specified Instance in FMOD_REVERB_PROPERTIES couldn't be set. Most likely because another application has locked the EAX4 FX slot. ";
                 case FMOD.RESULT.ERR_SUBSOUND_ALLOCATED:     return "This subsound is already being used by another sound, you cannot have more than one parent to a sound.  Null out the other parent's entry first. ";
@@ -98,12 +99,20 @@ namespace FMOD
                 case FMOD.RESULT.ERR_VERSION:                return "The version number of this file format is not supported. ";
 
                 case FMOD.RESULT.ERR_EVENT_FAILED:           return "An Event failed to be retrieved, most likely due to 'just fail' being specified as the max playbacks behavior. ";
+                case FMOD.RESULT.ERR_EVENT_GUIDCONFLICT:     return "An event with the same GUID already exists. ";
                 case FMOD.RESULT.ERR_EVENT_INFOONLY:         return "Can't execute this command on an EVENT_INFOONLY event. ";
                 case FMOD.RESULT.ERR_EVENT_INTERNAL:         return "An error occured that wasn't supposed to.  See debug log for reason. ";
                 case FMOD.RESULT.ERR_EVENT_MAXSTREAMS:       return "Event failed because 'Max streams' was hit when FMOD_INIT_FAIL_ON_MAXSTREAMS was specified. ";
                 case FMOD.RESULT.ERR_EVENT_MISMATCH:         return "FSB mis-matches the FEV it was compiled with. ";
                 case FMOD.RESULT.ERR_EVENT_NAMECONFLICT:     return "A category with the same name already exists. ";
+                case FMOD.RESULT.ERR_EVENT_NEEDSSIMPLE:      return "Tried to call a function on a complex event that's only supported by simple events. ";
                 case FMOD.RESULT.ERR_EVENT_NOTFOUND:         return "The requested event, event group, event category or event property could not be found. ";
+                case FMOD.RESULT.ERR_EVENT_ALREADY_LOADED:   return "The specified project has already been loaded. Having multiple copies of the same project loaded simultaneously is forbidden. ";
+
+                case FMOD.RESULT.ERR_MUSIC_NOCALLBACK:       return "The music callback is required, but it has not been set. ";
+                case FMOD.RESULT.ERR_MUSIC_UNINITIALIZED:    return "Music system is not initialized probably because no music data is loaded. ";
+                case FMOD.RESULT.ERR_MUSIC_NOTFOUND:         return "The requested music entity could not be found.";
+
                 default :                                    return "Unknown error.";
             }
         }

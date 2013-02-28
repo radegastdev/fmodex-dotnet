@@ -1,0 +1,5 @@
+fmod-dotnet/bin
+fmod-dotnet/obj
+*.user
+*.suo
+
