@@ -2027,8 +2027,6 @@ namespace FMOD
             IntPtr      soundraw    = new IntPtr();
             Sound       soundnew    = null;
 
-            mode = mode | FMOD.MODE.UNICODE;
-
             try
             {
                 result = FMOD_System_CreateSound(systemraw, name_or_data, mode, ref exinfo, ref soundraw);
@@ -2093,8 +2091,6 @@ namespace FMOD
             IntPtr      soundraw    = new IntPtr();
             Sound       soundnew    = null;
 
-            mode = mode | FMOD.MODE.UNICODE;
-
             try
             {
                 result = FMOD_System_CreateSound(systemraw, name_or_data, mode, 0, ref soundraw);
@@ -2126,8 +2122,6 @@ namespace FMOD
             RESULT result           = RESULT.OK;
             IntPtr      soundraw    = new IntPtr();
             Sound       soundnew    = null;
-
-            mode = mode | FMOD.MODE.UNICODE;
 
             try
             {
@@ -2192,8 +2186,6 @@ namespace FMOD
             RESULT result           = RESULT.OK;
             IntPtr      soundraw    = new IntPtr();
             Sound       soundnew    = null;
-
-            mode = mode | FMOD.MODE.UNICODE;
 
             try
             {
@@ -2934,13 +2926,13 @@ namespace FMOD
         private static extern RESULT FMOD_System_GetSpectrum            (IntPtr system, [MarshalAs(UnmanagedType.LPArray)]float[] spectrumarray, int numvalues, int channeloffset, DSP_FFT_WINDOW windowtype);
         [DllImport (VERSION.dll)]
         private static extern RESULT FMOD_System_GetWaveData            (IntPtr system, [MarshalAs(UnmanagedType.LPArray)]float[] wavearray, int numvalues, int channeloffset);
-        [DllImport (VERSION.dll, CharSet = CharSet.Unicode)]
+        [DllImport (VERSION.dll, CharSet = CharSet.Ansi)]
         private static extern RESULT FMOD_System_CreateSound            (IntPtr system, string name_or_data, MODE mode, ref CREATESOUNDEXINFO exinfo, ref IntPtr sound);
-        [DllImport (VERSION.dll, CharSet = CharSet.Unicode)]  
+        [DllImport (VERSION.dll, CharSet = CharSet.Ansi)]  
         private static extern RESULT FMOD_System_CreateStream           (IntPtr system, string name_or_data, MODE mode, ref CREATESOUNDEXINFO exinfo, ref IntPtr sound);
-        [DllImport(VERSION.dll, CharSet = CharSet.Unicode)]
+        [DllImport(VERSION.dll, CharSet = CharSet.Ansi)]
         private static extern RESULT FMOD_System_CreateSound            (IntPtr system, string name_or_data, MODE mode, int exinfo, ref IntPtr sound);
-        [DllImport(VERSION.dll, CharSet = CharSet.Unicode)]
+        [DllImport(VERSION.dll, CharSet = CharSet.Ansi)]
         private static extern RESULT FMOD_System_CreateStream           (IntPtr system, string name_or_data, MODE mode, int exinfo, ref IntPtr sound);   
         [DllImport (VERSION.dll)]   
         private static extern RESULT FMOD_System_CreateSound            (IntPtr system, byte[] name_or_data, MODE mode, ref CREATESOUNDEXINFO exinfo, ref IntPtr sound);
